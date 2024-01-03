@@ -21,12 +21,16 @@ app.use('/api/v1/',auth);
 app.use('/api/v1/',order);
 app.use('/api/v1/',payment);
 
-if(process.env.NODE_ENV === "production") {
+
     app.use(express.static(path.join(__dirname, '../frontend/build')));
-    app.get('*', (req, res) =>{
-        res.sendFile(path.resolve(__dirname, '../frontend/build/index.html'))
+    app.get('*', function (_, res){
+        res.sendFile(path.join(__dirname, '../frontend/build/index.html'),
+        function (err) {
+            res.status(500).send(err)
+        }
+        )
     })
-}
+
 
 app.use(errorMiddleware)
 
